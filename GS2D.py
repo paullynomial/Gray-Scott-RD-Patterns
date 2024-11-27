@@ -35,7 +35,7 @@ def apply_laplacian(mat, dx = 0.01):
 
     return neigh_mat/dx**2
 
-def update_rk4(U0, V0, DU, DV, f, k, delta_t, dx):
+def evolve_rk4(U0, V0, DU, DV, f, k, delta_t, dx):
 
     ############# Stage 1 ##############
     # diffusion
@@ -127,7 +127,6 @@ def IC(N):
     U = np.ones((N,N))
     V = np.zeros((N,N))
 
-    # initial disturbance 
     N1, N2, N3 = N//4-4, N//2, 3*N//4
     r = int(N/10.0)
     
@@ -157,9 +156,8 @@ def IC(N):
 
     return U, V
 
-def postProcess(output, N, xmin, xmax, ymin, ymax, num, save_path):
-    ''' num: Number of time step
-    '''
+def plot(output, N, xmin, xmax, ymin, ymax, num, save_path):
+
     x = np.linspace(xmin, xmax, N+1)[:-1]
     y = np.linspace(ymin, ymax, N+1)[:-1]
     x_star, y_star = np.meshgrid(x, y)
@@ -169,6 +167,7 @@ def postProcess(output, N, xmin, xmax, ymin, ymax, num, save_path):
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
     fig.subplots_adjust(hspace=0.3, wspace=0.3)
 
+    ## plot u
     cf = ax[0].scatter(x_star, y_star, c=u_pred, alpha=0.95, edgecolors='none', cmap='hot', marker='s', s=2)
     ax[0].axis('square')
     ax[0].set_xlim([xmin, xmax])
@@ -178,6 +177,7 @@ def postProcess(output, N, xmin, xmax, ymin, ymax, num, save_path):
     ax[0].set_title('u')
     fig.colorbar(cf, ax=ax[0], extend='both')
 
+    ## plot vq
     cf = ax[1].scatter(x_star, y_star, c=v_pred, alpha=0.95, edgecolors='none', cmap='hot', marker='s', s=2) #
     ax[1].axis('square')
     ax[1].set_xlim([xmin, xmax])
