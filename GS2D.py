@@ -172,7 +172,7 @@ def postProcess(output, N, xmin, xmax, ymin, ymax, num, batch, save_path):
     ax[0].set_ylim([ymin, ymax])
     cf.cmap.set_under('black')
     cf.cmap.set_over('white')
-    ax[0].set_title('u-FDM')
+    ax[0].set_title('u')
     fig.colorbar(cf, ax=ax[0], extend='both')
 
     cf = ax[1].scatter(x_star, y_star, c=v_pred, alpha=0.95, edgecolors='none', cmap='hot', marker='s', s=2) #
@@ -181,7 +181,7 @@ def postProcess(output, N, xmin, xmax, ymin, ymax, num, batch, save_path):
     ax[1].set_ylim([ymin, ymax])
     cf.cmap.set_under('black')
     cf.cmap.set_over('white')
-    ax[1].set_title('v-FDM')
+    ax[1].set_title('v')
     fig.colorbar(cf, ax=ax[1], extend='both')
 
     plt.savefig(save_path + 'uv_[b=%d][t=%d].png'%(batch, num))
