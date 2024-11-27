@@ -2,7 +2,10 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 import scipy.io as scio
-
+from PIL import Image
+import glob
+import time
+import re
 
 ## Laplacian Operator
 
@@ -154,7 +157,7 @@ def IC(N):
 
     return U, V
 
-def postProcess(output, N, xmin, xmax, ymin, ymax, num, batch, save_path):
+def postProcess(output, N, xmin, xmax, ymin, ymax, num, save_path):
     ''' num: Number of time step
     '''
     x = np.linspace(xmin, xmax, N+1)[:-1]
@@ -184,5 +187,22 @@ def postProcess(output, N, xmin, xmax, ymin, ymax, num, batch, save_path):
     ax[1].set_title('v')
     fig.colorbar(cf, ax=ax[1], extend='both')
 
-    plt.savefig(save_path + 'uv_[b=%d][t=%d].png'%(batch, num))
+    plt.savefig(save_path + 'uv_[t=%d].png'%(num))
     plt.close('all')
+
+
+def make_gif(image_path):
+
+    images = []
+
+    # retrieving all images used to make gif
+    file_list = sorted(glob.glob(image_path + '*.png'), key=lambda x: int(re.search(r'\[t=(\d+)\]', x).group(1)))
+    
+    # loop through all png files in the folder
+    for filename in file_list: 
+        im = Image.open(filename) 
+        images.append(im) 
+
+    # save as a gif   
+    images[0].save(image_path + 'animation' + '.gif',
+                save_all=True, append_images=images[1:], optimize=False, duration=500, loop=0)
