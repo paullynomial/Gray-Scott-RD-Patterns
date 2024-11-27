@@ -1,14 +1,14 @@
 import GS2D
 import numpy as np
+import os
 
 def main():
-    pass
 
     # Diffusion coefficients
     DA = 2*10**-5
     DB = 1*10**-5
 
-    # define feeding/killing rates
+    # feeding/killing rates
     f = 0.032
     k = 0.061
 
@@ -21,23 +21,31 @@ def main():
 
     # intialization
     U, V = GS2D.IC(N)
-    # print("A: ", A, " B: ", B)
     U_record = U.copy()[None,...]
     V_record = V.copy()[None,...]
 
-    N_simulation_steps = 15000
+    N_simulation_steps = 1000
+
+    saving_step = 5
 
     for step in range(N_simulation_steps):
         U, V = GS2D.update_rk4(U, V, DA, DB, f, k, delta_t, dx)
         
-        if step%5 ==0:
+        if step%saving_step ==0:
             U_record = np.concatenate((U_record, U[None,...]), axis=0)
             V_record = np.concatenate((V_record, V[None,...]), axis=0)
         
     UV = np.concatenate((U_record[None,...], V_record[None,...]), axis=0)
+    output = np.transpose(UV, [1, 0, 2, 3])
 
     # plotting & saving
-    output = np.transpose(UV, [1, 0, 2, 3])
+    plotting_interval = 10
     fig_save_path = f'./k={k}_f={f}/'
-    for i in range(21):
-        GS2D.postProcess(output, N, 0, N*dx, 0, N*dx, num=150*i, batch=1,save_path=fig_save_path)
+    if not os.path.exists(fig_save_path):
+        os.makedirs(fig_save_path)
+    for i in range(N_simulation_steps//(plotting_interval*saving_step)+1):
+        GS2D.postProcess(output, N, 0, N*dx, 0, N*dx, num=plotting_interval*i, batch=1,save_path=fig_save_path)
+
+
+
+main()
