@@ -87,9 +87,9 @@ def main():
     if not os.path.exists(fig_save_path):
         os.makedirs(fig_save_path)
     for i in range(N_simulation_steps//(plotting_interval*saving_step)+1):
-        GS2D.plotq(output, N, 0, N*dx, 0, N*dx, num=plotting_interval*i, save_path=fig_save_path)
+        GS2D.plot(output, N, 0, N*dx, 0, N*dx, num=plotting_interval*i, save_path=fig_save_path, f=f, k=k)
 
     # make a gif
-    GS2D.make_gif(fig_save_path)
+    GS2D.make_gif(fig_save_path, f, k)
 
 main()

@@ -156,7 +156,7 @@ def IC(N):
 
     return U, V
 
-def plot(output, N, xmin, xmax, ymin, ymax, num, save_path):
+def plot(output, N, xmin, xmax, ymin, ymax, num, save_path, f, k):
 
     x = np.linspace(xmin, xmax, N+1)[:-1]
     y = np.linspace(ymin, ymax, N+1)[:-1]
@@ -176,6 +176,7 @@ def plot(output, N, xmin, xmax, ymin, ymax, num, save_path):
     cf.cmap.set_over('white')
     ax[0].set_title('u')
     fig.colorbar(cf, ax=ax[0], extend='both')
+    fig.text(0.5, 0.95, 'f=%.4f, k=%.4f'%(f, k), ha='center')
 
     ## plot vq
     cf = ax[1].scatter(x_star, y_star, c=v_pred, alpha=0.95, edgecolors='none', cmap='hot', marker='s', s=2) #
@@ -186,12 +187,13 @@ def plot(output, N, xmin, xmax, ymin, ymax, num, save_path):
     cf.cmap.set_over('white')
     ax[1].set_title('v')
     fig.colorbar(cf, ax=ax[1], extend='both')
-
+    fig.text(0.5, 0.95, 'f=%.4f, k=%.4f'%(f, k), ha='center')
+    
     plt.savefig(save_path + 'uv_[t=%d].png'%(num))
     plt.close('all')
 
 
-def make_gif(image_path):
+def make_gif(image_path, f, k):
 
     images = []
 
@@ -204,5 +206,5 @@ def make_gif(image_path):
         images.append(im) 
 
     # save as a gif   
-    images[0].save(image_path + 'animation' + '.gif',
+    images[0].save(image_path + 'animation_f=%.4f_k=%.4f.gif'%(f, k),
                 save_all=True, append_images=images[1:], optimize=False, duration=500, loop=0)
