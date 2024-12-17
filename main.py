@@ -52,8 +52,8 @@ def main():
     DB = 1*10**-5
 
     # feeding/killing rates
-    f = 0.03
-    k = 0.055
+    f = 0.054
+    k = 0.065
 
     # grid size
     N = 100 # 128
